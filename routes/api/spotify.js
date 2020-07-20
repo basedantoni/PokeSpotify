@@ -8,7 +8,7 @@ const router = express.Router();
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_SECRET;
 
-let redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
+let redirect_uri = 'http://localhost:5000/api/spotify/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -72,7 +72,7 @@ router.get('/callback', function(req, res) {
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64'))
             },
             json: true
     };
@@ -116,7 +116,7 @@ router.get('/refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + (new Buffer(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
