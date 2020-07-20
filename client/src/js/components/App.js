@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 
 class App extends React.Component {
     render() {
-        return <h1>Hello Spotify Recommends</h1>;
+        return (
+            <div>
+                <h1>Hello Spotify Listener</h1>
+                <a href='http://localhost:5000/api/spotify/auth'>Login</a>
+            </div>
+        )
     }
 }
 
