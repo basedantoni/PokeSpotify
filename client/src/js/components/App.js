@@ -1,13 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import Navbar from './Navbar.js';
+import Dashboard from './Dashboard.js';
+import SpotifyAuth from './SpotifyAuth.js';
 
 class App extends React.Component {
     render() {
         return (
-            <div>
-                <h1>Hello Spotify Listener</h1>
-                <a href='http://localhost:5000/api/spotify/auth'>Login</a>
-            </div>
+            <Router>
+                <div>
+                    <Navbar/>
+                    <Switch>
+                        <Route exact path="/dashbord" >
+                            <Dashboard />
+                        </Route>
+                        <Route exact path="/spotify-auth" >
+                            <SpotifyAuth />
+                        </Route>
+                    </Switch>
+                </div>
+            </Router>
         )
     }
 }

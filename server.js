@@ -20,6 +20,7 @@ app.use(function(req, res, next) {
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
+
 // Use routes
 app.use('/api/spotify', spotify);
 
