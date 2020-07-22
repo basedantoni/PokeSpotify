@@ -2,6 +2,11 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   devServer: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:5000'
+        }
+      },
       host: 'localhost',
       port: 8080
   },

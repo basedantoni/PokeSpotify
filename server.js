@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const path = require('path');
+const port = process.env.PORT || 5000;
 
 const app = express();
 
@@ -20,8 +22,7 @@ app.use(function(req, res, next) {
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-
 // Use routes
 app.use('/api/spotify', spotify);
 
-app.listen(process.env.PORT || 5000, () => console.log('Serving running ... '));
+app.listen(port, () => console.log('Serving running on port ' + port));

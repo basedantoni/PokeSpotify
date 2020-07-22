@@ -2,13 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const request = require('request');
 const querystring = require('querystring');
+const SpotifyWebApi = require('spotify-web-api-node');
 
 const router = express.Router();
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_SECRET;
 
-let redirect_uri = 'http://localhost:5000/api/spotify/callback'; // Your redirect uri
+let redirect_uri = 'http://localhost:8080/api/spotify/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -26,6 +27,8 @@ const generateRandomString = function(length) {
 };
 
 let stateKey = 'spotify_auth_state';
+
+router.get('/hello', (req, res) => res.json({message: 'ho'}));
 
 // @route GET api/spotify/auth
 // @desc Authorize Spotify User
