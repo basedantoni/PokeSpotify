@@ -12,7 +12,7 @@ const router = express.Router();
 let spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_SECRET,
-  redirectUri: 'http://localhost:8080/api/spotify/callback'
+  redirectUri: 'http://localhost:3000/api/spotify/callback'
 });
 const scopes = ['user-read-private', 'user-read-email'];
 const state = generateRandomString(16);
@@ -26,34 +26,41 @@ router.get('/auth', (req, res) => {
   res.redirect(authorizeUrl);
 });
 
+router.get('/hello', (req, res) => {
+  res.json({message: 'ho'});
+})
+
 // @route GET api/spotify/callback
 // @desc Callback in step 2 of Spotify Authorization Flow
 // @access Public
 router.get('/callback', (req, res) => {
   let code = req.query.code || null;
   
-  spotifyApi.authorizationCodeGrant(code).then(
-    data => {
-      console.log('The token expires in ' + data.body['expires_in']);
-      
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(data.body['access_token']);
-      spotifyApi.setRefreshToken(data.body['refresh_token']);
-      console.log(spotifyApi);
-    },
-    err => {
-      console.log(`Something went wrong: ${err}`)
-    }
-  )
+  spotifyApi.authorizationCodeGrant(code)
+    .then(
+      data => {
+        console.log('The token expires in ' + data.body['expires_in']);
 
-  res.redirect('/#');
+        // Set the access token on the API object to use it in later calls
+        spotifyApi.setAccessToken(data.body['access_token']);
+        spotifyApi.setRefreshToken(data.body['refresh_token']);
+
+        return spotifyApi.getMe();
+    })
+    .then(data => {
+      console.log(data.body);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+  res.redirect('/');
 
 });
 
 // @route GET api/spotify/refresh_token
 // @desc Refresh Spotify API token
 // @access Public
-
 router.get('/refresh_token', (req, res) => {
   // clientId, clientSecret and refreshToken has been set on the api object previous to this call.
   spotifyApi.refreshAccessToken().then(
