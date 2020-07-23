@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+const mongoose = require('mongoose');
+const passport = require('passport')
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const port = process.env.PORT || 5000;
@@ -17,10 +18,24 @@ app.use(function(req, res, next) {
 
 // Bodyparser, CORS, and Cookie Parser Middleware
 app.use(express.json({extended: false}))
-    .use(cors())
     .use(cookieParser());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+// DB Config
+const db = process.env.MONGO_URI
+
+// Connect to Mongo
+mongoose.connect(db, { 
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
+// Passport Middelware
+app.use(passport.initialize());
+
+app.get('/', (req, res) => res.redirect('http://localhost:3000'));
 
 // Use routes
 app.use('/api/spotify', spotify);

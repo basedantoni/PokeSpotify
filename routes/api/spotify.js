@@ -1,18 +1,19 @@
 require('dotenv').config();
 
 const express = require('express');
-const request = require('request');
-const querystring = require('querystring');
 const SpotifyWebApi = require('spotify-web-api-node');
 const generateRandomString = require('../../utils/generateRandomString');
 
 const router = express.Router();
+const User = require('../../models/User');
+
+let authCode = '';
 
 // Credientials for SpotifyWebApi object
 let spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_SECRET,
-  redirectUri: 'http://localhost:3000/api/spotify/callback'
+  redirectUri: 'http://localhost:5000/api/spotify/callback'
 });
 const scopes = ['user-read-private', 'user-read-email'];
 const state = generateRandomString(16);
@@ -26,15 +27,13 @@ router.get('/auth', (req, res) => {
   res.redirect(authorizeUrl);
 });
 
-router.get('/hello', (req, res) => {
-  res.json({message: 'ho'});
-})
-
 // @route GET api/spotify/callback
 // @desc Callback in step 2 of Spotify Authorization Flow
 // @access Public
 router.get('/callback', (req, res) => {
+
   let code = req.query.code || null;
+  authCode = req.query.code;
   
   spotifyApi.authorizationCodeGrant(code)
     .then(
@@ -44,19 +43,27 @@ router.get('/callback', (req, res) => {
         // Set the access token on the API object to use it in later calls
         spotifyApi.setAccessToken(data.body['access_token']);
         spotifyApi.setRefreshToken(data.body['refresh_token']);
-
-        return spotifyApi.getMe();
+        accessToken = data.body['access_token'];
+      })
+    .catch(err => {
+      console.log(err);
     })
+    res.redirect('http://localhost:3000');
+});
+
+router.get('/me', (req, res) => {
+  console.log(authCode)
+
+  spotifyApi.authorizationCodeGrant(authCode)
     .then(data => {
-      console.log(data.body);
+      console.log(data)
+      // Set the access token on the API object to use it in later calls
+      spotifyApi.setAccessToken(data.body['access_token']);
     })
     .catch(err => {
       console.log(err);
     })
-
-  res.redirect('/');
-
-});
+})
 
 // @route GET api/spotify/refresh_token
 // @desc Refresh Spotify API token
