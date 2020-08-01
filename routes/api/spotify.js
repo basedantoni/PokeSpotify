@@ -1,10 +1,10 @@
 require('dotenv').config();
 
 const express = require('express');
+const router = express.Router();
 const SpotifyWebApi = require('spotify-web-api-node');
 const generateRandomString = require('../../utils/generateRandomString');
 
-const router = express.Router();
 const User = require('../../models/User');
 
 let authCode = '';
@@ -17,14 +17,14 @@ let spotifyApi = new SpotifyWebApi({
 });
 const scopes = ['user-read-private', 'user-read-email'];
 const state = generateRandomString(16);
-const authorizeUrl = spotifyApi.createAuthorizeURL(scopes, state);
 
 // @route GET api/spotify/auth
 // @desc Authorize Spotify User
 // @access Public
 router.get('/auth', (req, res) => {
   //Request Authentication
-  res.redirect(authorizeUrl);
+  let html = spotifyApi.createAuthorizeURL(scopes, state);
+  res.redirect(html);
 });
 
 // @route GET api/spotify/callback
@@ -32,8 +32,7 @@ router.get('/auth', (req, res) => {
 // @access Public
 router.get('/callback', (req, res) => {
 
-  let code = req.query.code || null;
-  authCode = req.query.code;
+  const code = req.query.code || null;
   
   spotifyApi.authorizationCodeGrant(code)
     .then(
@@ -44,25 +43,18 @@ router.get('/callback', (req, res) => {
         spotifyApi.setAccessToken(data.body['access_token']);
         spotifyApi.setRefreshToken(data.body['refresh_token']);
         accessToken = data.body['access_token'];
+
+        res.redirect('http://localhost:3000');
       })
     .catch(err => {
-      console.log(err);
+      res.status(400).json({error: err});
     })
-    res.redirect('http://localhost:3000');
 });
 
 router.get('/me', (req, res) => {
-  console.log(authCode)
-
-  spotifyApi.authorizationCodeGrant(authCode)
-    .then(data => {
-      console.log(data)
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(data.body['access_token']);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+  spotifyApi.getMe()
+    .then(data => res.json(data.body))
+    .catch(err => res.json(err))
 })
 
 // @route GET api/spotify/refresh_token
