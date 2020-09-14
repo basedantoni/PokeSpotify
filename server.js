@@ -10,9 +10,9 @@ const app = express();
 
 const spotify = require('./routes/api/spotify');
 
-const readImage = require('./readImage');
+// const readImage = require('./readImage');
 
-readImage();
+// readImage();
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
