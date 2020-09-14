@@ -1,11 +1,10 @@
 import React from 'react';
-import axios from 'axios';
+import Dashboard from './components/Dashboard'
 
 export const App = () => {
     return (
         <div>
-            <h1>Hello Spotify Listener</h1>
-            <a href='http://localhost:5000/api/spotify/auth'>Login</a>
+            <Dashboard />
         </div>
     )
 }

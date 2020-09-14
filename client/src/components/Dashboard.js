@@ -1,22 +1,24 @@
-import React, { Component } from 'react';
+import React, { /* Component */ } from 'react';
+import SpotifyButton from './SpotifyButton';
+import SelectionGrid from './SelectionGrid';
 import axios from 'axios';
-import { get } from 'request';
 
 class Dashboard extends React.Component {
     constructor() {
         super()
 
         this.state = {
-            name: 'null',
+            name: '',
+            isLoggedIn: false
         }
     }
 
     getMe() {
       axios.get('/api/spotify/me')
         .then(res => {
-            this.setState({
-                name: res.data
-            })
+            if(res.data.display_name) {
+                this.setState({isLoggedIn: true, name: res.data.display_name})
+            }
         })
         .catch(err => console.log(err))
     }
@@ -29,7 +31,8 @@ class Dashboard extends React.Component {
         return (
             <div>
                 <h1>Dashboard { this.state.name }</h1>
-                <button onClick={this.getMe}>Login</button>
+                <SpotifyButton isLoggedIn={this.state.isLoggedIn} />
+                <SelectionGrid />
             </div>
         )
     }

@@ -51,6 +51,9 @@ router.get('/callback', (req, res) => {
     })
 });
 
+// @route GET api/spotify/me
+// @desc Retreive User data
+// @access Public
 router.get('/me', (req, res) => {
   spotifyApi.getMe()
     .then(data => res.json(data.body))

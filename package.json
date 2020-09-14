@@ -14,18 +14,18 @@
   "author": "Anthony Mercado",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^5.2.0",
+    "concurrently": "^5.3.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.25",
+    "mongoose": "^5.10.5",
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-spotify": "^1.1.0",
     "querystring": "^0.2.0",
     "request": "^2.88.2",
     "spotify-web-api-node": "^4.0.0",
-    "tesseract.js": "^2.1.1"
+    "tesseract.js": "^2.1.2"
   }
 }
