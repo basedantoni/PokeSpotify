@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Pokemon = ({ name }) => {
+const Pokemon = ({ name, handleClick }) => {
   return (
     <div>
-      <button>{name}</button>
+      <button onClick={handleClick}>{name}</button>
     </div>
   )
 }
