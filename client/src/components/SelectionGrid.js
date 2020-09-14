@@ -19,7 +19,11 @@ const SelectionGrid = () => {
   const [teamCount, setTeamCount] = useState(0)
 
   const handleClick = () => {
-    setTeamCount(teamCount + 1)
+    if(teamCount < 6) {
+      setTeamCount(teamCount + 1)
+    } else {
+      console.log('Party is full')
+    }
   }
 
   return (
@@ -28,7 +32,7 @@ const SelectionGrid = () => {
       {pokemon.map(poke => (
         <Pokemon onClick={handleClick} name={poke.name} key={poke.url} />
       ))}
-      <Team count={teamCount} />
+      <Team />
     </div>
   )
 }
