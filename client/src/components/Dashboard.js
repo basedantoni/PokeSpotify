@@ -4,38 +4,37 @@ import SelectionGrid from './SelectionGrid';
 import axios from 'axios';
 
 class Dashboard extends React.Component {
-    constructor() {
-        super()
-
-        this.state = {
-            name: '',
-            isLoggedIn: false
-        }
+  constructor() {
+    super()
+    this.state = {
+      name: '',
+      isLoggedIn: false,
+      pokemon: []
     }
-
-    getMe() {
-      axios.get('/api/spotify/me')
-        .then(res => {
-            if(res.data.display_name) {
-                this.setState({isLoggedIn: true, name: res.data.display_name})
-            }
-        })
-        .catch(err => console.log(err))
-    }
-
-    componentDidMount() {
-        this.getMe();
-    }
-
-    render() {
-        return (
-            <div>
-                <h1>Dashboard { this.state.name }</h1>
-                <SpotifyButton isLoggedIn={this.state.isLoggedIn} />
-                <SelectionGrid />
-            </div>
-        )
-    }
+	}
+	
+  getMe() {
+    axios.get('/api/spotify/me')
+      .then(res => {
+          if(res.data.display_name) {
+              this.setState({isLoggedIn: true, name: res.data.display_name})
+          }
+      })
+      .catch(err => console.log(err))
+  }
+  componentDidMount() {
+    this.getMe();
+	}
+	
+  render() {
+    return (
+      <div>
+        <h1>Dashboard { this.state.name }</h1>
+        <SpotifyButton isLoggedIn={this.state.isLoggedIn} />
+        <SelectionGrid />
+      </div>
+    )
+  }
 }
 
 export default Dashboard;
