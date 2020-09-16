@@ -1,6 +1,6 @@
 import React, { /* Component */ } from 'react';
 import SpotifyButton from './SpotifyButton';
-import SelectionGrid from './SelectionGrid';
+import PokemonList from './PokemonList';
 import axios from 'axios';
 
 class Dashboard extends React.Component {
@@ -9,7 +9,6 @@ class Dashboard extends React.Component {
     this.state = {
       name: '',
       isLoggedIn: false,
-      pokemon: []
     }
 	}
 	
@@ -31,7 +30,7 @@ class Dashboard extends React.Component {
       <div>
         <h1>Dashboard { this.state.name }</h1>
         <SpotifyButton isLoggedIn={this.state.isLoggedIn} />
-        <SelectionGrid />
+        <PokemonList />
       </div>
     )
   }
