@@ -31,10 +31,12 @@ const PokemonList = () => {
     }
   }
 
-  const removePokemon = (name) => {
-    if(team.includes(name)) {
-      // Filter team if the pokemon is not equal to the pokemon selected
-      setTeam(team.filter(pokemon => pokemon !== name))
+  const removePokemon = (index) => {
+    if(teamCount > 0) {
+      setTeamCount(teamCount - 1)
+      setTeam(team.filter((_, i) => i !== index))
+    } else {
+      console.log('Party is empty')
     }
   }
 
@@ -45,7 +47,7 @@ const PokemonList = () => {
         <Pokemon onClick={() => addPokemon(name)} url={url} name={name} key={index} />
       ))}
       {team.map((name, index) => (
-        <Pokemon onClick={() => removePokemon(name)} name={name} key={index} />
+        <Pokemon onClick={() => removePokemon(index)} name={name} key={index} />
       ))}
     </div>
   )
