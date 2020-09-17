@@ -23,12 +23,12 @@ const PokemonList = () => {
   const [team, setTeam] = useState([])
   const [teamCount, setTeamCount] = useState(0)
 
-  const addPokemon = (name, pokeIndex) => {
+  const addPokemon = (name, pokeIndex, types) => {
     if(teamCount < 6) {
       // Increments Team Count
       setTeamCount(teamCount + 1)
       // Create Pokemon object
-      const pokemon = { name, pokeIndex }
+      const pokemon = { name, pokeIndex, types }
       // Pushes New Team Member to Team
       team.push(pokemon)
       setTeam(team)
@@ -48,16 +48,26 @@ const PokemonList = () => {
     }
   }
 
+  const makePlaylist = (team) => {
+    axios.post('/api/spotify/makePlaylist', team)
+  }
+
+  const getMe = () => {
+    axios.get('/api/spotify/me')
+  }
+
   return (
     <div>
       <h2>Choose Your Team</h2>
-      {pokemon.map(({ name, url }, index) => (
-        <Pokemon onClick={() => addPokemon(name, index)} pokeIndex={index} name={name} key={url} url={url} />
+      {pokemon.map(({ name, types, url }, index) => (
+        <Pokemon onClick={() => addPokemon(name, index, types)} pokeIndex={index} name={name} key={url} url={url} />
       ))}
       <h1>Team</h1>
       {team.map(({ name, pokeIndex }, index) => (
         <Pokemon onClick={() => removePokemon(index)} pokeIndex={pokeIndex} name={name} key={index} />
       ))}
+      <button onClick={() => makePlaylist(team)}>Make Playlist</button>
+      <button onClick={() => getMe()}>Get Me</button>
     </div>
   )
 }

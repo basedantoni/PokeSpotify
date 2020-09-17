@@ -18,8 +18,4 @@ const SpotifyButton = (props) => {
   )
 }
 
-SpotifyButton.propTypes = {
-
-}
-
 export default SpotifyButton

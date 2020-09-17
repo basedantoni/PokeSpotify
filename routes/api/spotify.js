@@ -5,9 +5,7 @@ const router = express.Router();
 const SpotifyWebApi = require('spotify-web-api-node');
 const generateRandomString = require('../../utils/generateRandomString');
 
-const User = require('../../models/User');
-
-let authCode = '';
+let accessToken;
 
 // Credientials for SpotifyWebApi object
 let spotifyApi = new SpotifyWebApi({
@@ -15,7 +13,7 @@ let spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.SPOTIFY_SECRET,
   redirectUri: 'http://localhost:5000/api/spotify/callback'
 });
-const scopes = ['user-read-private', 'user-read-email'];
+const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'playlist-modify-private', 'playlist-modify-public'];
 const state = generateRandomString(16);
 
 // @route GET api/spotify/auth
@@ -77,5 +75,20 @@ router.get('/refresh_token', (req, res) => {
     }
   );
 });
+
+router.post('/makePlaylist', (req, res) => {
+  const data = req.body;
+  data.map(({ types }) => console.log(types))
+
+  spotifyApi.createPlaylist('1279658217','Pokemon Master Radio', {public : false})
+    .then(data => {
+      console.log('Created playlist!')
+      console.log(data.body)
+    }).catch(err =>  {
+      console.log('Something went wrong!', err)
+    });
+
+  res.json('all good')
+})
 
 module.exports = router;
