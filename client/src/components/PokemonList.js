@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Pokemon from './Pokemon'
 import axios from 'axios'
 
-const PokemonList = () => {
+const PokemonList = ({ isLoggedIn }) => {
   // Pokemon State
   const [pokemon, setPokemon] = useState([])
   useEffect(() => {
@@ -48,13 +48,19 @@ const PokemonList = () => {
   }
 
   const makePlaylist = (team) => {
-    axios.post('/api/spotify/makePlaylist', team)
+    if(teamCount === 6) {
+      axios.post('/api/spotify/makePlaylist', team)
+    } else {
+      console.log('fill your team up')
+      return 'Fill You Team Up First!'
+    }
   }
 
-  return (
+  let list;
+  isLoggedIn ? list = 
     <div>
       <h2>Choose Your Team</h2>
-      {pokemon.map(({ name, types, url }, index) => (
+      {pokemon.map(({ name, url }, index) => (
         <Pokemon onClick={() => addPokemon(name, index, url)} pokeIndex={index + 1} name={name} key={url} />
       ))}
       <h1>Team</h1>
@@ -62,6 +68,13 @@ const PokemonList = () => {
         <Pokemon onClick={() => removePokemon(index)} pokeIndex={pokeIndex + 1} name={name} key={index} />
       ))}
       <button onClick={() => makePlaylist(team)}>Make Playlist</button>
+    </div>
+  :
+  list = null
+
+  return (
+    <div>
+      {list}
     </div>
   )
 }

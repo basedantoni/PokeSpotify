@@ -26,11 +26,12 @@ class Dashboard extends React.Component {
 	}
 	
   render() {
+    const { isLoggedIn } = this.state
     return (
       <div>
         <h1>Dashboard { this.state.name }</h1>
-        <SpotifyButton isLoggedIn={this.state.isLoggedIn} />
-        <PokemonList />
+        <SpotifyButton isLoggedIn={isLoggedIn} />
+        <PokemonList isLoggedIn={isLoggedIn} />
       </div>
     )
   }
