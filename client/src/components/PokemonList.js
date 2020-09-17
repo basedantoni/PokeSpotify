@@ -50,8 +50,8 @@ const PokemonList = ({ isLoggedIn }) => {
   const makePlaylist = (team) => {
     if(teamCount === 6) {
       axios.post('/api/spotify/makePlaylist', team)
+      return 'Creating Playlist'
     } else {
-      console.log('fill your team up')
       return 'Fill You Team Up First!'
     }
   }
