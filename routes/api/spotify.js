@@ -5,7 +5,23 @@ const router = express.Router();
 const SpotifyWebApi = require('spotify-web-api-node');
 const generateRandomString = require('../../utils/generateRandomString');
 
-let accessToken;
+const genres = {
+  bug: '37i9dQZF1DWZgauS5j6pMv', // Nu-Funk
+  dragon: '37i9dQZF1DX4SBhb3fqCJd', // Are & Be
+  ice: '37i9dQZF1DX889U0CL85jj', // Chill Vibes
+  fighting: '37i9dQZF1DX76Wlfdnj7AP', // Beast Mode
+  fire: '37i9dQZF1DX0XUsuxWHRQd', // RapCaviar
+  flying: '37i9dQZF1DXdbXrPNafg9d', // All New Indie
+  grass: '6nU0t33tQA2i0qTI5HiyRV', // Country Hits
+  ghost: '37i9dQZF1DX6xZZEgC9Ubl', // Tear Drop
+  ground: '37i9dQZF1DXaSQZr9c1SpZ', // This Is Bon Iver
+  electric: '37i9dQZF1DX4dyzvuaRJ0n', // mint
+  normal: '37i9dQZF1DXcBWIGoYBM5M', // Today's Top Hits
+  poison: '37i9dQZF1DWXIcbzpLauPS', // New Core
+  psychic: '37i9dQZF1DX82GYcclJ3Ug', // New Alt
+  rock: '37i9dQZF1DWXRqgorJj26U', // Rock Classics
+  water: '37i9dQZF1DXdyjMX5o2vCq' // This Is Frank Ocean
+}
 
 // Credientials for SpotifyWebApi object
 let spotifyApi = new SpotifyWebApi({
@@ -78,15 +94,44 @@ router.get('/refresh_token', (req, res) => {
 
 router.post('/makePlaylist', (req, res) => {
   const data = req.body;
-  data.map(({ types }) => console.log(types))
 
-  spotifyApi.createPlaylist('1279658217','Pokemon Master Radio', {public : false})
+  // Refactor this later :O
+  let typesList = [];
+  data.map(({ types }) => typesList.push(types))
+  typesList = typesList.flat().map(({ type }) => type.name)
+  // Make list of types unique
+  typesList = [...new Set(typesList)]
+
+  spotifyApi.getMe()
     .then(data => {
-      console.log('Created playlist!')
-      console.log(data.body)
-    }).catch(err =>  {
-      console.log('Something went wrong!', err)
-    });
+
+      spotifyApi.createPlaylist(data.body.id,'Pokemon Master Radio', {public : false})
+        .then(data => {
+          console.log('Created playlist!')
+          //console.log(data.body)
+          let playlistId = data.body.id;
+          // Add songs for each type
+          console.log(typesList)
+          typesList.map(type => {
+
+            spotifyApi.getPlaylistTracks(genres[type], { limit: 12 - typesList.length })
+              .then(data => {
+                let tracks = [];
+                data.body.items.map(item => {
+                  tracks.push(item.track.uri)
+                })
+
+                spotifyApi.addTracksToPlaylist(playlistId, tracks)
+                  .then(data => console.log('Added Tracks'))
+                  .catch(err => console.log(err))
+              })
+              .catch(err => console.log(err))
+          })
+        }).catch(err =>  {
+          console.log('Something went wrong!', err)
+        });
+    })
+    .catch(err => console.log(err))
 
   res.json('all good')
 })

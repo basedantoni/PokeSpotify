@@ -9,11 +9,7 @@ const PokemonList = () => {
     async function fetchPokemon() {
       const res = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151')
       let pokemonArr = res.data.results
-      // Get types for each Pokemon
-      pokemonArr.map(async poke => {
-        let res = await axios.get(poke.url)
-        poke.types = res.data.types
-      })
+
       setPokemon(pokemonArr)
     }
     fetchPokemon()
@@ -23,12 +19,15 @@ const PokemonList = () => {
   const [team, setTeam] = useState([])
   const [teamCount, setTeamCount] = useState(0)
 
-  const addPokemon = (name, pokeIndex, types) => {
+  const addPokemon = async (name, pokeIndex, url) => {
     if(teamCount < 6) {
       // Increments Team Count
       setTeamCount(teamCount + 1)
+      // Fetch this pokemon's types
+      const res = await axios.get(url)
       // Create Pokemon object
-      const pokemon = { name, pokeIndex, types }
+      const pokemon = { name, pokeIndex, types: res.data.types }
+
       // Pushes New Team Member to Team
       team.push(pokemon)
       setTeam(team)
@@ -52,22 +51,17 @@ const PokemonList = () => {
     axios.post('/api/spotify/makePlaylist', team)
   }
 
-  const getMe = () => {
-    axios.get('/api/spotify/me')
-  }
-
   return (
     <div>
       <h2>Choose Your Team</h2>
       {pokemon.map(({ name, types, url }, index) => (
-        <Pokemon onClick={() => addPokemon(name, index, types)} pokeIndex={index} name={name} key={url} url={url} />
+        <Pokemon onClick={() => addPokemon(name, index, url)} pokeIndex={index + 1} name={name} key={url} />
       ))}
       <h1>Team</h1>
       {team.map(({ name, pokeIndex }, index) => (
-        <Pokemon onClick={() => removePokemon(index)} pokeIndex={pokeIndex} name={name} key={index} />
+        <Pokemon onClick={() => removePokemon(index)} pokeIndex={pokeIndex + 1} name={name} key={index} />
       ))}
       <button onClick={() => makePlaylist(team)}>Make Playlist</button>
-      <button onClick={() => getMe()}>Get Me</button>
     </div>
   )
 }
