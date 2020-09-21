@@ -27,11 +27,18 @@ class Dashboard extends React.Component {
 	
   render() {
     const { isLoggedIn } = this.state
+
+    let spotifyLogin;
+
+    isLoggedIn ? spotifyLogin = null : spotifyLogin = <SpotifyButton />
+    
     return (
       <div>
-        <h1>Dashboard { this.state.name }</h1>
-        <SpotifyButton isLoggedIn={isLoggedIn} />
-        <PokemonList isLoggedIn={isLoggedIn} />
+        <h1 className="text-4xl font-bold text-gray-700 p-2 m-4">Pokemon Master Playlist</h1>
+        <div className="flex flex-wrap justify-center items-center my-8">
+          {spotifyLogin}
+          <PokemonList isLoggedIn={isLoggedIn} />
+        </div>
       </div>
     )
   }

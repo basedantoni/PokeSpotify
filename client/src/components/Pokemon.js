@@ -3,7 +3,7 @@ import React from 'react'
 const Pokemon = ({ name, pokeIndex, onClick }) => {
   return (
     <div>
-      <button onClick={() => onClick()}>
+      <button className="btn bg-white hover:bg-gray-300" onClick={() => onClick()}>
         <img 
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeIndex}.png`} 
           alt={`pokemon-no-${pokeIndex}`}

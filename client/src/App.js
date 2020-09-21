@@ -3,7 +3,7 @@ import Dashboard from './components/Dashboard'
 
 export const App = () => {
     return (
-        <div>
+        <div className="bg-orange-300 h-screen font-display overflow-hidden">
             <Dashboard />
         </div>
     )

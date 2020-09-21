@@ -6,7 +6,7 @@ const PokemonList = ({ isLoggedIn }) => {
   // Pokemon State
   const [pokemon, setPokemon] = useState([])
   useEffect(() => {
-    async function fetchPokemon() {
+    const fetchPokemon = async () => {
       const res = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151')
       let pokemonArr = res.data.results
 
@@ -21,15 +21,14 @@ const PokemonList = ({ isLoggedIn }) => {
 
   const addPokemon = async (name, pokeIndex, url) => {
     if(teamCount < 6) {
-      // Increments Team Count
-      setTeamCount(teamCount + 1)
       // Fetch this pokemon's types
       const res = await axios.get(url)
       // Create Pokemon object
       const pokemon = { name, pokeIndex, types: res.data.types }
-
       // Pushes New Team Member to Team
       team.push(pokemon)
+      // Increments Team Count
+      setTeamCount(teamCount + 1)
       setTeam(team)
     } else {
       console.log('Party is full')
@@ -56,18 +55,32 @@ const PokemonList = ({ isLoggedIn }) => {
     }
   }
 
-  let list;
+  let teamTitle
+  team.length ? teamTitle = <h1>Your Team</h1> : teamTitle = null
+
+  let playlistBtn
+  team.length === 6 ? playlistBtn = 
+    <button className="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold my-2 py-2 px-4 border border-gray-400 rounded shadow" 
+    onClick={() => makePlaylist(team)}>Make Playlist</button>
+    :
+    playlistBtn = null
+
+  let list
   isLoggedIn ? list = 
-    <div>
-      <h2>Choose Your Team</h2>
-      {pokemon.map(({ name, url }, index) => (
-        <Pokemon onClick={() => addPokemon(name, index, url)} pokeIndex={index + 1} name={name} key={url} />
-      ))}
-      <h1>Team</h1>
-      {team.map(({ name, pokeIndex }, index) => (
-        <Pokemon onClick={() => removePokemon(index)} pokeIndex={pokeIndex + 1} name={name} key={index} />
-      ))}
-      <button onClick={() => makePlaylist(team)}>Make Playlist</button>
+    <div className="flex flex-col items-center">
+      <h2>Choose 6 Pokemon For Your Team</h2>
+      <div className="flex flex-wrap overflow-y-scroll mb-4 h-64 md:w-4/12 w-11/12 rounded bg-white">
+        {pokemon.map(({ name, url }, index) => (
+          <Pokemon onClick={() => addPokemon(name, index, url)} pokeIndex={index + 1} name={name} key={url} />
+        ))}
+      </div>
+      {teamTitle}
+      <div className="flex flex-wrap justify-center">
+        {team.map(({ name, pokeIndex }, index) => (
+          <Pokemon onClick={() => removePokemon(index)} pokeIndex={pokeIndex + 1} name={name} key={index} />
+        ))}
+      </div>
+      {playlistBtn}
     </div>
   :
   list = null
