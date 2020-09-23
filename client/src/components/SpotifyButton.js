@@ -7,7 +7,7 @@ const SpotifyButton = () => {
       <div className="flex flex-wrap justify-center">
         <h1 className="py-4 my-4 text-gray-700 font-semibold">Login to Spotify to create a playlist customized to your first generation Pokemon team</h1>
         <a 
-          href='http://localhost:5000/api/spotify/auth'
+          href='https://pokespotify.herokuapp.com/api/spotify/auth'
           className="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold my-2 mx-2 py-2 px-4 border border-gray-400 rounded shadow"
         >Login</a>
       </div>
