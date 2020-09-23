@@ -58,7 +58,7 @@ router.get('/callback', (req, res) => {
         spotifyApi.setRefreshToken(data.body['refresh_token']);
         accessToken = data.body['access_token'];
 
-        res.redirect('http://localhost:3000');
+        res.redirect('https://pokespotify.herokuapp.com/');
       })
     .catch(err => {
       res.status(400).json({error: err});
