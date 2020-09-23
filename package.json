@@ -7,9 +7,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
     "nodemon": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run nodemon\" \"npm run client\""
+  },
+  "engines": {
+    "node": "13.13.0"
   },
   "author": "Anthony Mercado",
   "license": "MIT",

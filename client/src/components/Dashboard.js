@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         <h1 className="text-4xl font-bold text-gray-700 p-2 m-4">Pokemon Master Playlist</h1>
-        <div className="flex flex-wrap justify-center items-center my-8">
+        <div className="flex flex-wrap justify-center items-center md:my-8">
           {spotifyLogin}
           <PokemonList isLoggedIn={isLoggedIn} />
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Pokemon from './Pokemon'
+import Message from './Message'
 import axios from 'axios'
 
 const PokemonList = ({ isLoggedIn }) => {
@@ -18,6 +19,9 @@ const PokemonList = ({ isLoggedIn }) => {
   // Team State
   const [team, setTeam] = useState([])
   const [teamCount, setTeamCount] = useState(0)
+
+  // Message State
+  const [message, setMessage] = useState()
 
   const addPokemon = async (name, pokeIndex, url) => {
     if(teamCount < 6) {
@@ -49,6 +53,11 @@ const PokemonList = ({ isLoggedIn }) => {
   const makePlaylist = (team) => {
     if(teamCount === 6) {
       axios.post('/api/spotify/makePlaylist', team)
+        .then(res => {
+          setMessage(res.data)
+          setTeam([])
+        })
+        .catch(err => console.log(err))
       return 'Creating Playlist'
     } else {
       return 'Fill You Team Up First!'
@@ -56,7 +65,7 @@ const PokemonList = ({ isLoggedIn }) => {
   }
 
   let teamTitle
-  team.length ? teamTitle = <h1>Your Team</h1> : teamTitle = null
+  team.length ? teamTitle = <h1 className="mb-2 text-gray-700">Your Team</h1> : teamTitle = null
 
   let playlistBtn
   team.length === 6 ? playlistBtn = 
@@ -68,8 +77,8 @@ const PokemonList = ({ isLoggedIn }) => {
   let list
   isLoggedIn ? list = 
     <div className="flex flex-col items-center">
-      <h2>Choose 6 Pokemon For Your Team</h2>
-      <div className="flex flex-wrap overflow-y-scroll mb-4 h-64 md:w-4/12 w-11/12 rounded bg-white">
+      <h2 className="mb-2 text-gray-700">Choose 6 Pokemon For Your Team</h2>
+      <div className="flex flex-wrap overflow-y-scroll mb-4 h-64 md:w-4/12 w-11/12 rounded bg-white shadow-lg">
         {pokemon.map(({ name, url }, index) => (
           <Pokemon onClick={() => addPokemon(name, index, url)} pokeIndex={index + 1} name={name} key={url} />
         ))}
@@ -88,6 +97,7 @@ const PokemonList = ({ isLoggedIn }) => {
   return (
     <div>
       {list}
+      <Message message={message} />
     </div>
   )
 }

@@ -107,11 +107,11 @@ router.post('/makePlaylist', (req, res) => {
 
       spotifyApi.createPlaylist(data.body.id,'Pokemon Master Radio', {public : false})
         .then(data => {
-          console.log('Created playlist!')
-          //console.log(data.body)
+
           let playlistId = data.body.id;
+          const playlistUrl = data.body.owner.external_urls.spotify
+          
           // Add songs for each type
-          console.log(typesList)
           typesList.map(type => {
 
             spotifyApi.getPlaylistTracks(genres[type], { limit: 12 - typesList.length })
@@ -122,18 +122,19 @@ router.post('/makePlaylist', (req, res) => {
                 })
 
                 spotifyApi.addTracksToPlaylist(playlistId, tracks)
-                  .then(data => console.log('Added Tracks'))
+                  .then(data => data)
                   .catch(err => console.log(err))
               })
               .catch(err => console.log(err))
           })
+
+          // Send Playlist Url
+          res.json(playlistUrl)
         }).catch(err =>  {
           console.log('Something went wrong!', err)
         });
     })
     .catch(err => console.log(err))
-
-  res.json('all good')
 })
 
 module.exports = router;
