@@ -27,7 +27,7 @@ const genres = {
 let spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_SECRET,
-  redirectUri: 'http://localhost:5000/api/spotify/callback'
+  redirectUri: 'https://pokespotify.herokuapp.com/api/spotify/callback'
 });
 const scopes = ['user-read-private', 'user-read-email', 'playlist-read-private', 'playlist-modify-private', 'playlist-modify-public'];
 const state = generateRandomString(16);
