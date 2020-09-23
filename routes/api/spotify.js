@@ -41,6 +41,10 @@ router.get('/auth', (req, res) => {
   res.redirect(html);
 });
 
+router.get('/test', (req, res) => {
+  res.json('Hello')
+})
+
 // @route GET api/spotify/callback
 // @desc Callback in step 2 of Spotify Authorization Flow
 // @access Public
