@@ -11,7 +11,7 @@ const app = express();
 const spotify = require('./routes/api/spotify');
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://pokespotify.herokuapp.com"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", `http://localhost:${port}`); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -34,8 +34,6 @@ mongoose.connect(db, {
 
 // Passport Middelware
 app.use(passport.initialize());
-
-//app.get('/', (req, res) => res.redirect('https://pokespotify.herokuapp.com'));
 
 // Use routes
 app.use('/api/spotify', spotify);
