@@ -35,7 +35,7 @@ mongoose.connect(db, {
 // Passport Middelware
 app.use(passport.initialize());
 
-app.get('/', (req, res) => res.redirect('https://pokespotify.herokuapp.com'));
+//app.get('/', (req, res) => res.redirect('https://pokespotify.herokuapp.com'));
 
 // Use routes
 app.use('/api/spotify', spotify);
