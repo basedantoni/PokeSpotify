@@ -22,15 +22,8 @@ class Dashboard extends React.Component {
       .catch(err => console.log(err))
   }
 
-  test() {
-    axios.get('/api/spotify/test')
-      .then(data => console.log(data))
-      .catch(err => console.log(err))
-  }
-
   componentDidMount() {
     this.getMe();
-    this.test();
 	}
 	
   render() {

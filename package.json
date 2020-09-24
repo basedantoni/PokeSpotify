@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Create a playlist from a team of Pokemon",
   "main": "server.js",
-  "proxy": "https://pokespotify.herokuapp.com/",
+  "proxy": "http://localhost:3000",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
